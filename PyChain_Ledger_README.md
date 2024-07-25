@@ -91,28 +91,28 @@ Key methods include `proof_of_work`, `add_block`, and `is_valid`.
 ## Screenshots
 
 ### Block Difficulty 1
-![Block Difficulty 1](images/Difficulty_1.png)
+![Block Difficulty 1](/Images/Difficulty_1.png)
 
 ### Block Difficulty 2
-![Block Difficulty 2](images/Difficulty_2.png)
+![Block Difficulty 2](/Images/Difficulty_2.png)
 
 ### Block Difficulty 3
-![Block Difficulty 3](images/Difficulty_3.png)
+![Block Difficulty 3](/Images/Difficulty_3.png)
 
 ### Block Difficulty 4
-![Block Difficulty 4](images/Difficulty_4.png)
+![Block Difficulty 4](/Images/Difficulty_4.png)
 
 ### Block Difficulty 5
-![Block Difficulty 5](images/Difficulty_5.png)
+![Block Difficulty 5](/Images/Difficulty_5.png)
 
 ### The PyChain Ledger
-![The PyChain Ledger](images/The_PyChain_Ledger.png)
+![The PyChain Ledger](/Images/The_PyChain_Ledger.png)
 
 ### Block Validation
-![Block Validation](images/Block_Validation.png)
+![Block Validation](/Images/Block_Validation.png)
 
 ### Terminal Printouts
-![Terminal Printouts](images/Terminal_Printouts.png)
+![Terminal Printouts](/Images/Terminal_Printouts.png)
 
 ## Explanation of the Records in the Ledger
 
@@ -148,13 +148,13 @@ The goal of this project is to create a robust blockchain system that demonstrat
 ## Setup Instructions
 
 1. **Clone the repository:**
-   ```bash
+```bash
    git clone git@github.com:AlexC3105/FinTech_Mod-18_Challenge.git
    cd FinTech_Mod-18_Challenge
 ```
 
 2. **Install the required libraries:**
-   ```bash
+```bash
    pip install streamlit pandas dataclasses hashlib
 ```
 - **streamlit:** A web application framework for creating a user-friendly interface.
@@ -163,7 +163,7 @@ The goal of this project is to create a robust blockchain system that demonstrat
 - **hashlib:** Used for hashing functions (built-in for Python 3.x).
 
 3. **Run the Streamlit application:**
-   ```bash
+```bash
    streamlit run pychain.py
 ```
 
