@@ -75,6 +75,7 @@ class Block:
     prev_hash: str = "0"
     timestamp: str = datetime.datetime.utcnow().strftime("%H:%M:%S")
     nonce: int = 0
+    difficulty: int = 4
 
     def hash_block(self):
         sha = hashlib.sha256()
@@ -94,6 +95,9 @@ class Block:
         nonce = str(self.nonce).encode()
         sha.update(nonce)
 
+        difficulty = str(self.difficulty).encode()
+        sha.update(difficulty)
+
         return sha.hexdigest()
 
 @dataclass
@@ -103,7 +107,7 @@ class PyChain:
 
     def proof_of_work(self, block):
         calculated_hash = block.hash_block()
-        num_of_zeros = "0" * self.difficulty
+        num_of_zeros = "0" * block.difficulty
 
         while not calculated_hash.startswith(num_of_zeros):
             block.nonce += 1
@@ -133,15 +137,13 @@ class PyChain:
 # Streamlit Code
 
 # Adds the cache decorator for Streamlit
-@st.cache_data
-def setup():
-    print("Initializing Chain")
-    return PyChain([Block(Record("Genesis", "Genesis", 0), 0)])
+if 'pychain' not in st.session_state:
+    st.session_state['pychain'] = PyChain([Block(Record("Genesis", "Genesis", 0), 0)])
 
 st.markdown("# PyChain")
 st.markdown("## Store a Transaction Record in the PyChain")
 
-pychain = setup()
+pychain = st.session_state['pychain']
 
 ################################################################################
 # Step 3:
@@ -159,9 +161,6 @@ pychain = setup()
 
 # Add Relevant User Inputs to the Streamlit Interface
 
-# Delete the `input_data` variable from the Streamlit interface.
-# input_data = st.text_input("Block Data")
-
 # Add an input area where you can get a value for `sender` from the user.
 sender = st.text_input("Sender")
 
@@ -171,17 +170,17 @@ receiver = st.text_input("Receiver")
 # Add an input area where you can get a value for `amount` from the user.
 amount = st.number_input("Amount", min_value=0.0, step=0.01)
 
+difficulty = st.sidebar.slider("Block Difficulty", 1, 5, 2)
+
 if st.button("Add Block"):
     prev_block = pychain.chain[-1]
     prev_block_hash = prev_block.hash_block()
 
-    # Update `new_block` so that `Block` consists of an attribute named `record`
-    # which is set equal to a `Record` that contains the `sender`, `receiver`,
-    # and `amount` values
     new_block = Block(
         record=Record(sender, receiver, amount),
         creator_id=42,
-        prev_hash=prev_block_hash
+        prev_hash=prev_block_hash,
+        difficulty=difficulty
     )
 
     pychain.add_block(new_block)
@@ -195,9 +194,6 @@ st.markdown("## The PyChain Ledger")
 pychain_df = pd.DataFrame([block.__dict__ for block in pychain.chain]).astype(str)
 st.write(pychain_df)
 
-difficulty = st.sidebar.slider("Block Difficulty", 1, 5, 2)
-pychain.difficulty = difficulty
-
 st.sidebar.write("# Block Inspector")
 selected_block = st.sidebar.selectbox(
     "Which block would you like to see?", pychain.chain
@@ -206,7 +202,12 @@ selected_block = st.sidebar.selectbox(
 st.sidebar.write(selected_block)
 
 if st.button("Validate Chain"):
-    st.write(pychain.is_valid())
+    is_valid = pychain.is_valid()
+    st.write(is_valid)
+    if is_valid:
+        st.success("Blockchain is Valid")
+    else:
+        st.error("Blockchain is Invalid")
 
 ################################################################################
 # Step 4:
